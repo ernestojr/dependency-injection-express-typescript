@@ -4,7 +4,6 @@ import App from '../app';
 
 export default async (app:App) => {
 	const { MONGODB_URI } = app.env;
-	app.log.debug('app', app);
 	try {
 		await mongoose.connect(<string>MONGODB_URI, {
 			useNewUrlParser: true,

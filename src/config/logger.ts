@@ -1,16 +1,13 @@
-import { format, transports, createLogger } from 'winston';
+const winston = require('winston');
 
-const { colorize, combine, timestamp, printf } = format;
-
-export default createLogger({ 
-  format: combine(
-      colorize(),
-      timestamp(),
-      printf(({ level, message, timestamp }) => {
-          return `${timestamp} ${level}: ${message}`;
-      }),
-    ),
+export default new winston.Logger({
+  level: 'silly',
+  exitOnError: false,
   transports: [
-      new transports.Console({ level: 'debug' }),
+    new(winston.transports.Console)({
+      prettyPrint: true,
+      colorize: true,
+      json: false,
+    }),
   ],
 });

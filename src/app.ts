@@ -76,7 +76,6 @@ class Application {
 
     public async start() {
         const port = this.app.get('port');
-        this.log.debug(this.env);
         await database(this);
         await this.app.listen(port);
         this.log.info('Server running', port);

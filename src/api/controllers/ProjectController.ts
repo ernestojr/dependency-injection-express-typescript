@@ -1,5 +1,5 @@
 /**
- * @file TaskController.js
+ * @file ProjectController.js
  * @version 1.0.0
  * @author Ernesto Rojas <ernesto20145@gmail.com>
  */
@@ -7,24 +7,24 @@
 import Base from '../core/Base';
 
 /**
- * @class TaskController
- * @classdesc Task's controllers.
+ * @class ProjectController
+ * @classdesc Project's controllers.
  * @author Ernesto Rojas <ernesto20145@gmail.com>
  */
-class TaskController extends Base {
+class ProjectController extends Base {
   /**
    * @method create
    * @author Ernesto Rojas <ernesto20145@gmail.com>
    * @param {object} req - Express request.
    * @param {object} res - Express response.
-   * @description This method create a new task.
+   * @description This method create a new project.
    * @returns {Promise} Promise with operation.
    */
   create = async (req, res) => {
     const { body } = req;
     const { ProjectService } = this.app.services;
-    const task = await ProjectService.create(body);
-    res.status(201).json(task);
+    const project = await ProjectService.create(body);
+    res.status(201).json(project);
   };
 
   /**
@@ -52,16 +52,20 @@ class TaskController extends Base {
    * @author Ernesto Rojas <ernesto20145@gmail.com>
    * @param {object} req - Express request.
    * @param {object} res - Express response.
-   * @description This method get task by id.
+   * @description This method get project by id.
    * @returns {Promise} Promise with operation.
    */
-  getById = async (req, res) => {
-    const { ProjectService } = this.app.services;
-    const {
-      params: { id },
-    } = req;
-    const task = await ProjectService.getById(id);
-    res.status(200).json(task);
+  getById = async (req, res, next) => {
+    try {
+      const { ProjectService } = this.app.services;
+      const {
+        params: { id },
+      } = req;
+      const project = await ProjectService.getById(id);
+      res.status(200).json(project);
+    } catch (error) {
+      next(error);
+    }
   };
 
   /**
@@ -69,7 +73,7 @@ class TaskController extends Base {
    * @author Ernesto Rojas <ernesto20145@gmail.com>
    * @param {object} req - Express request.
    * @param {object} res - Express response.
-   * @description This method update task by id.
+   * @description This method update project by id.
    * @returns {Promise} Promise with operation.
    */
   updateById = async (req, res) => {
@@ -86,7 +90,7 @@ class TaskController extends Base {
    * @author Ernesto Rojas <ernesto20145@gmail.com>
    * @param {object} req - Express request.
    * @param {object} res - Express response.
-   * @description This method delete task by id.
+   * @description This method delete project by id.
    * @returns {Promise} Promise with operation.
    */
   deleteById = async (req, res) => {
@@ -99,4 +103,4 @@ class TaskController extends Base {
   };
 }
 
-export default TaskController;
+export default ProjectController;

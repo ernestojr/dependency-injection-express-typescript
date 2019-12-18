@@ -1,8 +1,8 @@
-import { Schema, model, Model, Document } from 'mongoose';
-import BasicModel from '../../core/Model';
+import { Schema } from 'mongoose';
+import BasicModel from '../../core/BasicModel';
 
 class User extends BasicModel {
-    private getSchema():Schema {
+    protected getSchema():Schema {
       const opts = { timestamps: true };
         return new Schema({
             fullname: { type: String, required: true },
@@ -12,8 +12,8 @@ class User extends BasicModel {
         }, opts);
     }
     
-    public build():Model<Document> {
-        return model('User', this.getSchema());
+    protected getName() {
+        return 'User';
     }
 }
 

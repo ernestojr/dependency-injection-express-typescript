@@ -5,6 +5,7 @@
   "main": "server.js",
   "scripts": {
     "tsc": "tsc",
+    "prettier": "prettier --config ./.prettierrc --write src/**/*.ts",
     "dev": "ts-node-dev --respawn --transpileOnly ./src/server.ts",
     "prod": "tsc && node ./dist/app.js",
     "clean": "rimraf ./dist"

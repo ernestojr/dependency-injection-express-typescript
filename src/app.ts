@@ -13,6 +13,7 @@ import logger from './config/logger';
 import database from './config/database';
 import web from './config/web';
 import Controller from './core/Controller';
+import { Interface } from 'readline';
 
 // Starting the server
 

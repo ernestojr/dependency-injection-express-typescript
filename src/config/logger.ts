@@ -1,10 +1,10 @@
-const winston = require('winston');
+import { Logger, transports } from 'winston';
 
-export default new winston.Logger({
+export default new Logger({
   level: 'silly',
   exitOnError: false,
   transports: [
-    new winston.transports.Console({
+    new transports.Console({
       prettyPrint: true,
       colorize: true,
       json: false,

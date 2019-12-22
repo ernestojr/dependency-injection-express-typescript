@@ -4,7 +4,7 @@
  * @author Ernesto Rojas <ernesto20145@gmail.com>
  */
 
-import Base from '../core/Base';
+import Base from '../../core/Base';
 
 /**
  * @class TaskController

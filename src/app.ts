@@ -9,18 +9,17 @@ import tasks from './api/routes/tasks';
 import Task from './api/models/Task';
 import TaskController from './api/controllers/TaskController';
 
-import logger from './config/logger';
+import loggerConf from './config/logger';
 import database from './config/database';
 import web from './config/web';
 import Controller from './core/Controller';
-import { Interface } from 'readline';
 
 // Starting the server
 
 class Application {
 
     private app:express.Application;
-    public log:Logger;
+    public logger:Logger;
     public env:{
         [key:string]:string|number;
     };
@@ -36,7 +35,7 @@ class Application {
     constructor() {
         this.env = env;
         this.app = express();
-        this.logger();
+        this.log();
         this.buildModels();
         this.buildControllers();
         this.setting();
@@ -56,8 +55,8 @@ class Application {
         };
     }
 
-    private logger() {
-        this.log = logger;
+    private log() {
+        this.logger = loggerConf;
     }
 
     private setting() {
@@ -79,7 +78,7 @@ class Application {
         const port = this.app.get('port');
         await database(this);
         await this.app.listen(port);
-        this.log.info('Server running', port);
+        this.logger.info('Server running', port);
     }
 }
 

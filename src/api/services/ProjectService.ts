@@ -4,7 +4,11 @@
  * @author Ernesto Rojas <ernesto20145@gmail.com>
  */
 
+import moment from 'moment';
+
 import Service from '../../core/Service';
+import UtilService from './UtilService';
+import { ObjectString } from '../../config/types';
 
 /**
  * @class ProjectService
@@ -19,7 +23,7 @@ class ProjectService extends Service {
    * @description This method create a new task.
    * @returns {Promise} Promise with operation. When promise is resolve, return new task created.
    */
-  create(data) {
+  create(data:any) {
     const { Project } = this.app.models;
     return Project.create(data);
   }
@@ -32,10 +36,10 @@ class ProjectService extends Service {
    * @returns {Promise} Promise with operation. When promise is resolve, return a object with
    * collection tasks data and pagination data.
    */
-  async get(query) {
+  async get(query:ObjectString) {
     const { Project } = this.app.models;
     const { UtilService } = this.app.services;
-    const { all, fields, limit, skip, sort } = UtilService.buidOpts(query);
+    const { all, fields, limit, skip, sort } = (<UtilService>UtilService).buidOpts(query);
     const criteria = buidCriteria(query);
     const count = await Project.countDocuments(criteria);
     const pagination = { count, limit: all ? count : limit };
@@ -56,12 +60,11 @@ class ProjectService extends Service {
    * @throws {Error} Project id not found error.
    * @returns {Promise} Promise with operation.
    */
-  async getById(id) {
+  async getById(id:string) {
     const { Project } = this.app.models;
     const project = await Project.findById(id);
     if (!project) {
-      const { Exception } = this.app;
-      throw new Exception(`Project ${id} not found.`, 404);
+      throw this.app.createException(`Project ${id} not found.`, 404);
     }
     return project;
   }
@@ -75,7 +78,7 @@ class ProjectService extends Service {
    * @throws {Error} Project id not found error.
    * @returns {Promise} Promise with operation.
    */
-  async updateById(_id, data) {
+  async updateById(_id:string, data:any) {
     const { Project } = this.app.models;
     await this.getById(_id);
     return Project.updateOne({ _id }, { $set: data });
@@ -89,10 +92,10 @@ class ProjectService extends Service {
    * @throws {Error} Project id not found error.
    * @returns {Promise} Promise with operation.
    */
-  async deleteById(_id) {
+  async deleteById(_id:string) {
     const { Project } = this.app.models;
     await this.getById(_id);
-    return Project.removeOne({ _id });
+    return Project.deleteOne({ _id });
   }
 }
 
@@ -103,7 +106,7 @@ class ProjectService extends Service {
  * @description This method build criteria to search.
  * @returns {object} Object with fields criteria.
  */
-function buidCriteria(query = {}) {
+function buidCriteria(query:ObjectString = {}) {
   const { search, fromDate, toDate } = query;
   const criteria = {};
   const filterDate = [];

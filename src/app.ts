@@ -12,7 +12,14 @@ import TaskController from './api/controllers/TaskController';
 import loggerConf from './config/logger';
 import database from './config/database';
 import web from './config/web';
+
 import Controller from './core/Controller';
+import Service from './core/Service';
+import Exception from './core/Exception';
+
+import ProjectService from './api/services/ProjectService';
+import TaskService from './api/services/TaskService';
+import UtilService from './api/services/UtilService';
 
 // Starting the server
 
@@ -32,15 +39,30 @@ class Application {
         [key:string]:Controller;
     } = {};
 
+    public services:{
+        [key:string]:Service;
+    } = {};
+
+    public Exception:Exception;
+
     constructor() {
         this.env = env;
         this.app = express();
         this.log();
         this.buildModels();
+        this.buildServices();
         this.buildControllers();
         this.setting();
         this.middlewares();
         this.routes();
+    }
+
+    private buildServices() {
+        this.services = {
+            ProjectService: new ProjectService(this),
+            TaskService: new TaskService(this),
+            UtilService: new UtilService(this),
+        };
     }
 
     private buildControllers() {
@@ -57,6 +79,10 @@ class Application {
 
     private log() {
         this.logger = loggerConf;
+    }
+
+    public createException(message:string, status:number) {
+        return new Exception(message, status);
     }
 
     private setting() {

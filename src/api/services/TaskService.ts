@@ -4,7 +4,11 @@
  * @author Ernesto Rojas <ernesto20145@gmail.com>
  */
 
+import moment from 'moment';
+
 import Service from '../../core/Service';
+import UtilService from './UtilService';
+import { ObjectString } from '../../config/types';
 
 /**
  * @class TaskService
@@ -31,10 +35,10 @@ class TaskService extends Service {
    * @returns {Promise} Promise with operation. When promise is resolve, return a object with
    * collection projects data and pagination data.
    */
-  async get(query:{ [key:string]: string }) {
+  async get(query:ObjectString) {
     const { Task } = this.app.models;
     const { UtilService } = this.app.services;
-    const { all, fields, limit, skip, sort } = UtilService.buidOpts(query);
+    const { all, fields, limit, skip, sort } = (<UtilService>UtilService).buidOpts(query);
     const criteria = await buidCriteria(query);
     const count = await Task.countDocuments(criteria);
     const pagination = { count, limit: all ? count : limit };
@@ -54,12 +58,11 @@ class TaskService extends Service {
    * @throws {Error} Task id not found error.
    * @returns {Promise} Promise with operation.
    */
-  async getById(id) {
+  async getById(id:string) {
     const { Task } = this.app.models;
     const project = await Task.findById(id);
     if (!project) {
-      const { Exception } = this.app;
-      throw new Exception(`Task ${id} not found.`, 404);
+      throw this.app.createException(`Task ${id} not found.`, 404);
     }
     return project;
   }
@@ -72,7 +75,7 @@ class TaskService extends Service {
    * @throws {Error} Task id not found error.
    * @returns {Promise} Promise with operation.
    */
-  async updateById(_id, data) {
+  async updateById(_id:string, data:object) {
     const { Task } = this.app.models;
     await this.getById(_id);
     return Task.updateOne({ _id }, { $set: data });
@@ -86,10 +89,10 @@ class TaskService extends Service {
    * @throws {Error} Task id not found error.
    * @returns {Promise} Promise with operation.
    */
-  async deleteById(_id) {
+  async deleteById(_id:string) {
     const { Task } = this.app.models;
     await this.getById(_id);
-    return Task.removeOne({ _id });
+    return Task.deleteOne({ _id });
   }
 }
 
@@ -100,7 +103,7 @@ class TaskService extends Service {
  * @description This method build criteria to search.
  * @returns {object} Object with fields criteria.
  */
-async function buidCriteria(query = {}) {
+async function buidCriteria(query:ObjectString = {}) {
   const { search, fromDate, toDate } = query;
   const criteria = {};
   const filterDate = [];

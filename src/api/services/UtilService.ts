@@ -28,7 +28,7 @@ class UtilService extends Service {
    */
   buidOpts(query:ObjectString = {}, opts: Opts = {}) {
     const { excludeFields, fieldsDafault = {} } = opts;
-    const { all = false, fields = null, limit = 10, page = 1 } = query;
+    const { all = false, fields = null, limit = '10', page = '1' } = query;
     let validFields: string | ObjectNumber | Array<string> = fields;
     if (validFields) {
       validFields = replace(validFields, new RegExp(' ', 'g'), '');
@@ -41,7 +41,7 @@ class UtilService extends Service {
       }
       validFields = reduce(
         validFields,
-        (result, field) => {
+        (result:any, field) => {
           result[field] = 1;
           return result;
         },

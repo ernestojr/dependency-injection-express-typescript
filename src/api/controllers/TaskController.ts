@@ -4,7 +4,10 @@
  * @author Ernesto Rojas <ernesto20145@gmail.com>
  */
 
+import { Request, Response, NextFunction } from 'express';
+
 import Base from '../../core/Base';
+import TaskService from '../services/TaskService';
 
 /**
  * @class TaskController
@@ -20,10 +23,10 @@ class TaskController extends Base {
    * @description This method create a new task.
    * @returns {Promise} Promise with operation.
    */
-  create = async (req, res) => {
+  create = async (req:Request, res:Response) => {
     const { body } = req;
-    const { ProjectService } = this.app.services;
-    const task = await ProjectService.create(body);
+    const { TaskService } = this.app.services;
+    const task = await (<TaskService>TaskService).create(body);
     res.status(201).json(task);
   };
 
@@ -35,10 +38,10 @@ class TaskController extends Base {
    * @description This method get projects by query params.
    * @returns {Promise} Promise with operation.
    */
-  get = async (req, res) => {
+  get = async (req:Request, res:Response) => {
     const { query } = req;
-    const { ProjectService } = this.app.services;
-    const { collection, pagination } = await ProjectService.get(query);
+    const { TaskService } = this.app.services;
+    const { collection, pagination } = await (<TaskService>TaskService).get(query);
     res.set({
       'X-Pagination-Total-Count': pagination.count,
       'X-Pagination-Limit': pagination.limit,
@@ -55,13 +58,17 @@ class TaskController extends Base {
    * @description This method get task by id.
    * @returns {Promise} Promise with operation.
    */
-  getById = async (req, res) => {
-    const { ProjectService } = this.app.services;
-    const {
-      params: { id },
-    } = req;
-    const task = await ProjectService.getById(id);
-    res.status(200).json(task);
+  getById = async (req:Request, res:Response, next:NextFunction) => {
+    try {
+      const { TaskService } = this.app.services;
+      const {
+        params: { id },
+      } = req;
+      const task = await (<TaskService>TaskService).getById(id);
+      res.status(200).json(task);
+    } catch (error) {
+      next(error);
+    }
   };
 
   /**
@@ -72,12 +79,12 @@ class TaskController extends Base {
    * @description This method update task by id.
    * @returns {Promise} Promise with operation.
    */
-  updateById = async (req, res) => {
-    const { ProjectService } = this.app.services;
+  updateById = async (req:Request, res:Response) => {
+    const { TaskService } = this.app.services;
     const {
       params: { id },
     } = req;
-    await ProjectService.updateById(id, req.body);
+    await (<TaskService>TaskService).updateById(id, req.body);
     res.status(204).end();
   };
 
@@ -89,12 +96,12 @@ class TaskController extends Base {
    * @description This method delete task by id.
    * @returns {Promise} Promise with operation.
    */
-  deleteById = async (req, res) => {
-    const { ProjectService } = this.app.services;
+  deleteById = async (req:Request, res:Response) => {
+    const { TaskService } = this.app.services;
     const {
       params: { id },
     } = req;
-    await ProjectService.deleteById(id);
+    await (<TaskService>TaskService).deleteById(id);
     res.status(204).end();
   };
 }

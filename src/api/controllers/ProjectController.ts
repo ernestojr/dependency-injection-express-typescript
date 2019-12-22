@@ -4,7 +4,10 @@
  * @author Ernesto Rojas <ernesto20145@gmail.com>
  */
 
+import { Request, Response, NextFunction } from 'express';
+
 import Base from '../../core/Base';
+import ProjectService from '../services/ProjectService';
 
 /**
  * @class ProjectController
@@ -20,10 +23,10 @@ class ProjectController extends Base {
    * @description This method create a new project.
    * @returns {Promise} Promise with operation.
    */
-  create = async (req, res) => {
+  create = async (req:Request, res:Response) => {
     const { body } = req;
     const { ProjectService } = this.app.services;
-    const project = await ProjectService.create(body);
+    const project = await (<ProjectService>ProjectService).create(body);
     res.status(201).json(project);
   };
 
@@ -35,10 +38,10 @@ class ProjectController extends Base {
    * @description This method get projects by query params.
    * @returns {Promise} Promise with operation.
    */
-  get = async (req, res) => {
+  get = async (req:Request, res:Response) => {
     const { query } = req;
     const { ProjectService } = this.app.services;
-    const { collection, pagination } = await ProjectService.get(query);
+    const { collection, pagination } = await (<ProjectService>ProjectService).get(query);
     res.set({
       'X-Pagination-Total-Count': pagination.count,
       'X-Pagination-Limit': pagination.limit,
@@ -55,13 +58,13 @@ class ProjectController extends Base {
    * @description This method get project by id.
    * @returns {Promise} Promise with operation.
    */
-  getById = async (req, res, next) => {
+  getById = async (req:Request, res:Response, next:NextFunction) => {
     try {
       const { ProjectService } = this.app.services;
       const {
         params: { id },
       } = req;
-      const project = await ProjectService.getById(id);
+      const project = await (<ProjectService>ProjectService).getById(id);
       res.status(200).json(project);
     } catch (error) {
       next(error);
@@ -76,12 +79,12 @@ class ProjectController extends Base {
    * @description This method update project by id.
    * @returns {Promise} Promise with operation.
    */
-  updateById = async (req, res) => {
+  updateById = async (req:Request, res:Response) => {
     const { ProjectService } = this.app.services;
     const {
       params: { id },
     } = req;
-    await ProjectService.updateById(id, req.body);
+    await (<ProjectService>ProjectService).updateById(id, req.body);
     res.status(204).end();
   };
 
@@ -93,12 +96,12 @@ class ProjectController extends Base {
    * @description This method delete project by id.
    * @returns {Promise} Promise with operation.
    */
-  deleteById = async (req, res) => {
+  deleteById = async (req:Request, res:Response) => {
     const { ProjectService } = this.app.services;
     const {
       params: { id },
     } = req;
-    await ProjectService.deleteById(id);
+    await (<ProjectService>ProjectService).deleteById(id);
     res.status(204).end();
   };
 }

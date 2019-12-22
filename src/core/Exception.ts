@@ -10,8 +10,8 @@
  * @author Ernesto Rojas <ernesto20145@gmail.com>
  */
 class Exception extends Error {
-	public statusCode:number;
-  constructor(message:string, statusCode:number) {
+  public statusCode: number;
+  constructor(message: string, statusCode: number) {
     super(message);
     this.statusCode = statusCode;
   }

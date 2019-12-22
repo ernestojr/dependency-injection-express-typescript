@@ -7,7 +7,7 @@
     "tsc": "tsc",
     "prettier": "prettier --config ./.prettierrc --write src/**/*.ts",
     "dev": "ts-node-dev --respawn --transpileOnly ./src/server.ts",
-    "prod": "tsc && node ./dist/app.js",
+    "prod": "tsc && node ./dist/server.js",
     "clean": "rimraf ./dist"
   },
   "keywords": [
@@ -44,8 +44,8 @@
     "@types/moment": "^2.13.0",
     "@types/mongoose": "^5.5.32",
     "@types/morgan": "^1.7.37",
-    "@types/winston": "^2.4.4",
     "nodemon": "^2.0.1",
+    "prettier": "^1.19.1",
     "ts-node-dev": "^1.0.0-pre.44",
     "typescript": "^3.7.2"
   }
